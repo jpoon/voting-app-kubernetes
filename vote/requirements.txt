@@ -1,0 +1,4 @@
+Flask
+Redis
+gunicorn
+azure-storage==0.32.0
