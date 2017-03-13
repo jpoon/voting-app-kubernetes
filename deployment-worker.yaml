@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: worker-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: worker
+        app: voting-app
+    spec:
+      containers:
+      - name: worker
+        image: japoonregistry-microsoft.azurecr.io/voting-app/worker:latest
+        env:
+        - name: AZURE_STORAGE_ACCOUNT
+          valueFrom:
+            secretKeyRef:
+              name: azure-storage
+              key: account-name
+        - name: AZURE_STORAGE_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: azure-storage
+              key: access-key
+      imagePullSecrets:
+      - name: acr-secret
