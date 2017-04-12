@@ -28,3 +28,16 @@ spec:
         - containerPort: 80
       imagePullSecrets:
       - name: acr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: result-service
+  labels:
+    app: voting-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    name: result

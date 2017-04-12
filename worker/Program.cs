@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
@@ -10,20 +11,30 @@ namespace worker
 {
     class Program
     {
-        static string StorageAccountName = Environment.GetEnvironmentVariable("AZURE_STORAGE_ACCOUNT");
-        static string StorageAccountKey = Environment.GetEnvironmentVariable("AZURE_STORAGE_ACCESS_KEY");
+        static string StorageAccountName = Environment.GetEnvironmentVariable("AZURE_STORAGE_ACCOUNT").Trim();
+        static string StorageAccountKey = Environment.GetEnvironmentVariable("AZURE_STORAGE_ACCESS_KEY").Trim();
 
         static void Main(string[] args)
         {
+            var cts = new CancellationTokenSource();
+
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                e.Cancel = true;
+                cts.Cancel();
+            };
+
+            Console.WriteLine($"StorageAccountName: {StorageAccountName}");
             if (String.IsNullOrEmpty(StorageAccountName)) {
                 throw new ArgumentNullException(nameof(StorageAccountName));
             }
 
+            Console.WriteLine($"StorageAccountKey: {StorageAccountKey}");
             if (String.IsNullOrEmpty(StorageAccountKey)) {
                 throw new ArgumentNullException(nameof(StorageAccountKey));
             }
 
-            var storageAccount = CloudStorageAccount.Parse($"DefaultEndpointsProtocol=https;AccountName={StorageAccountName};AccountKey={StorageAccountKey};");
+            var storageAccount = CloudStorageAccount.Parse($"DefaultEndpointsProtocol=https;AccountName={StorageAccountName};AccountKey={StorageAccountKey};EndpointSuffix=core.windows.net");
 
             var queueClient = storageAccount.CreateCloudQueueClient();
             var queue = queueClient.GetQueueReference("votes");
@@ -33,8 +44,14 @@ namespace worker
 
             Console.WriteLine($"Starting worker...");
 
-            while (true) {
-                CheckQueueAsync(queue, table).Wait();
+            try {
+                while (!cts.IsCancellationRequested) {
+                    CheckQueueAsync(queue, table).Wait(cts.Token);
+                }
+            } catch (OperationCanceledException) {
+                // swallow
+            } finally {
+                cts.Dispose();
             }
         }
 
