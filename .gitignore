@@ -3,4 +3,4 @@ project.lock.json
 bin/
 obj/
 .DS_STORE
-*/.vscode
+.vscode

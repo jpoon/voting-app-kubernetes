@@ -35,6 +35,7 @@ DNS_PREFIX=japoon-kube-demo
 CLUSTER_NAME=japoon-kube-demo
 ## >> az acs create --orchestrator-type=kubernetes --resource-group $RESOURCE_GROUP --name=$CLUSTER_NAME --dns-prefix=$DNS_PREFIX --service-principal http://$SERVICE_PRINCIPAL_NAME --client-secret $SERVICE_PRINCIPAL_PASSWORD
 echo
+open -a "/Applications/Google Chrome.app/" https://ms.portal.azure.com/#resource/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourcegroups/japoon-kube/overview
 
 ## -------
 ## Install Kubectl
@@ -70,20 +71,21 @@ kubectl scale deployment ghost --replicas=3
 
 ## -------
 ## Accessing private service
-## 1) Cluster IP
+## 1) Pod IP:PORT (2368)
 ssh azureuser@$DN5_PREFIX.$LOCATION.cloudapp.azure.com
 
 ## -------
 ## 2) Port forwarding
 ## >> kubectl port-forward <POD-NAME> 2368
+## >> kubectl logs <POD-NAME>
 echo 
 
 ## -------
 ## Expose the service using a LoadBalancer
 ## Azure CloudProvider will create (1) public IP, (2) load balancer 
-kubectl expose deployment ghost --port=80 --type=LoadBalancer
+kubectl expose deployment ghost --port=80 --target-port=2368 --type=LoadBalancer
 
 ## -------
 ## Scale Up/Down Agent Nodes
-## >> kubectl cordon <NODE> --ignore-daemonsets
-az acs scale --resource-group $RESOURCE_GR0UP --name $CLUSTER_NAME --new-agent-count 1
+## >> kubectl drain <NODE> --ignore-daemonsets
+az acs scale --resource-group $RESOURCE_GR0UP --name $CLU5TER_NAMEE --new-agent-count 1
