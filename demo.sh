@@ -6,15 +6,15 @@
 #doitlive commentecho: true
 
 #doitlive env: SUBSCRIPTION_ID="04f7ec88-8e28-41ed-8537-5e17766001f5"
-#doitlive env: SERVICE_PRINCIPAL_NAME=japoon-kube-demo
+#doitlive env: SERVICE_PRINCIPAL_NAME=jason-kubernetes-greece
 #doitlive env: SERVICE_PRINCIPAL_PASSWORD=`date | md5 | head -c8; echo`
-#doitlive env: RESOURCE_GROUP=japoon-kube-demo
-#doitlive env: RESOURCE_GR0UP=japoon-kube
-#doitlive env: LOCATION=westus
-#doitlive env: DNS_PREFIX=japoon-kube-demo
-#doitlive env: DN5_PREFIX=japoon-kube
-#doitlive env: CLUSTER_NAME=japoon-kube-demo
-#doitlive env: CLU5TER_NAME=japoon-kube
+#doitlive env: RESOURCE_GROUP=jason-kubernetes-greece
+#doitlive env: RESOURCE_GR0UP=jason-kubernetes-greece
+#doitlive env: LOCATION=westeurope
+#doitlive env: DNS_PREFIX=jason-kubernetes-greece
+#doitlive env: DN5_PREFIX=jason-kubernetes-greece
+#doitlive env: CLUSTER_NAME=jason-kubernetes-greece
+#doitlive env: CLU5TER_NAME=jason-kubernetes-greece
 
 ## -------
 ## create service principal
@@ -33,7 +33,7 @@ az group create --name=$RESOURCE_GROUP --location=$LOCATION
 ## create kubernetes cluster
 DNS_PREFIX=japoon-kube-demo
 CLUSTER_NAME=japoon-kube-demo
-## >> az acs create --orchestrator-type=kubernetes --resource-group $RESOURCE_GROUP --name=$CLUSTER_NAME --dns-prefix=$DNS_PREFIX --service-principal http://$SERVICE_PRINCIPAL_NAME --client-secret $SERVICE_PRINCIPAL_PASSWORD
+az acs create --orchestrator-type=kubernetes --resource-group $RESOURCE_GROUP --name=$CLUSTER_NAME --dns-prefix=$DNS_PREFIX --service-principal http://$SERVICE_PRINCIPAL_NAME --client-secret $SERVICE_PRINCIPAL_PASSWORD
 echo
 open -a "/Applications/Google Chrome.app/" https://ms.portal.azure.com/#resource/subscriptions/04f7ec88-8e28-41ed-8537-5e17766001f5/resourcegroups/japoon-kube/overview
 

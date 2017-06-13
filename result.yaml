@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: result
-        image: japoonregistry-microsoft.azurecr.io/voting-app/result:latest
+        image: jpoon/result:latest
         env:
         - name: AZURE_STORAGE_ACCOUNT
           valueFrom:
@@ -26,8 +26,6 @@ spec:
               key: access-key
         ports:
         - containerPort: 80
-      imagePullSecrets:
-      - name: acr-secret
 ---
 apiVersion: v1
 kind: Service

@@ -45,5 +45,3 @@ kubectl create -f vote.yaml
 kubectl create -f worker.yaml
 kubectl create -f result.yaml
 ```
-
-*Note*: You will need to build, tag, and deploy the Docker images to a registry and update the Kubernetes manifests with the location of the images.

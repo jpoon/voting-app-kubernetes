@@ -38,9 +38,11 @@ namespace worker
 
             var queueClient = storageAccount.CreateCloudQueueClient();
             var queue = queueClient.GetQueueReference("votes");
+            queue.CreateIfNotExistsAsync().Wait(cts.Token);
 
             var tableClient = storageAccount.CreateCloudTableClient();
             var table = tableClient.GetTableReference("votes");
+            table.CreateIfNotExistsAsync().Wait(cts.Token);
 
             Console.WriteLine($"Starting worker...");
 

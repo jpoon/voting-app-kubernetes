@@ -1,2 +1,2 @@
-docker build -t japoonregistry-microsoft.azurecr.io/voting-app/vote .
-docker push japoonregistry-microsoft.azurecr.io/voting-app/vote
+docker build -t jpoon/vote .
+docker push jpoon/vote
